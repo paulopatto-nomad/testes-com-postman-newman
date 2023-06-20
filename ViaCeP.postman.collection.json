@@ -1,0 +1,67 @@
+{
+	"info": {
+		"_postman_id": "7b6f911d-0761-4e51-a2ee-fff4cbd30496",
+		"name": "[TEST] ViaCeP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4723705"
+	},
+	"item": [
+		{
+			"name": "Consulta",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function zipCode() {",
+							"    var zipCodes = [",
+							"        \"04470-190\",",
+							"        \"05894-230\",",
+							"        \"04458-000\",",
+							"        \"06850-265\"",
+							"    ];",
+							"",
+							"    return zipCodes[Math.floor(Math.random() * zipCodes.length)];",
+							"}",
+							"",
+							"pm.variables.set(\"ZipCode\", zipCode());"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"should return status code eq :success (200)\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"should return a object w/ key :logradouro\", () => {",
+							"    let body = pm.response.json();",
+							"    pm.expect(body).to.hasOwnProperty(\"logradouro\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/{{ZipCode}}/json/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{ZipCode}}",
+						"json",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
