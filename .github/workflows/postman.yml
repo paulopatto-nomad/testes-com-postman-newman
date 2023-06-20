@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Postman-CI
 
 # Controls when the workflow will run
 on:
@@ -30,4 +30,19 @@ jobs:
         run: |
           newman --version
           node --version
+        
+      - name: Install newman reporter html
+        run: sudo npm i -g newman-reporter-htmlextra
 
+      - name: Execute collection
+        run: |
+          newman run ./collection.json \
+            -e env.json \
+            --reporters cli, -r htmlextra \
+            --reporter-htmlextra-export ./results/Report.html
+
+      - name: archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+            name: report
+            path: ./results/Report.html
